@@ -65,9 +65,9 @@ class SubEntityController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($idEntity, $id, Entity $entity)
+    public function edit($idEntity, $id)
     {
-        $entity = $entity->find($idEntity);
+        $entity = $this->parent->find($idEntity);
         $subEntity = $this->model->find($id);
         return view('entity.subEntity.edit')->with(['entity' => $entity, 'subEntity' => $subEntity]);
     }
