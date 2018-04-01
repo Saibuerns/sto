@@ -1,18 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Entity;
 use App\Models\SubEntity;
-use Illuminate\Http\Request;
 use App\Http\Requests\Entity\SubEntity\StoreRequest;
+use App\Http\Requests\Entity\SubEntity\UpdateRequest;
 
 class SubEntityController extends Controller
 {
 
-    public function __construct(Entity $entity, SubEntity $subEntity)
+    public function __construct(SubEntity $subEntity)
     {
-        $this->parent = $entity;
         $this->model = $subEntity;
     }
 
@@ -21,9 +19,9 @@ class SubEntityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($idEntity)
+    public function create($idEntity, Entity $entity)
     {
-        $entity = $this->parent->find($idEntity);
+        $entity = $entity->find($idEntity);
         return view('entity.subentity.create')->with('entity', $entity);
     }
 
@@ -35,16 +33,15 @@ class SubEntityController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $idEntity = $request->get('idEntity');
         $this->model->setAttribute('name', $request->get('subEntityName'));
+        $this->model->setAttribute('idEntity', $request->get('idEntity'));
         if ($request->has('subEntityDescription')) {
             $this->model->setAttribute('description', $request->get('subEntityDescription'));
         }
-        $saved = $this->parent->find($idEntity)->subEntitys()->save($this->model);
+        $saved = $this->model->save();
         if ($saved) {
             return redirect()->route('entity.index');
         }
-
     }
 
     /**
@@ -53,10 +50,10 @@ class SubEntityController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($idEntity, $id)
     {
         $subEntity = $this->model->find($id);
-        return view('entity.subentity.show')->with('subEntity', $subEntity);
+        return view('entity.subentity.show')->with(['idEntity' => $idEntity, 'subEntity' => $subEntity]);
     }
 
     /**
@@ -65,9 +62,9 @@ class SubEntityController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($idEntity, $id)
+    public function edit($idEntity, $id, Entity $entity)
     {
-        $entity = $this->parent->find($idEntity);
+        $entity = $entity->find($idEntity);
         $subEntity = $this->model->find($id);
         return view('entity.subEntity.edit')->with(['entity' => $entity, 'subEntity' => $subEntity]);
     }
@@ -79,12 +76,13 @@ class SubEntityController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        $subEntity = $this->model->find($id);
-        $subEntity->setAttribute($request->get('nameSubEntity'));
+        $this->model->find($id);
+        $this->model->setAttribute('name', $request->get('nameSubEntity'));
+        $this->model->setAttribute('idEntity', $request->get('idEntity'));
         if ($request->has('descriptionSubEntity')) {
-            $subEntity->setAttribute($request->get('descriptionSubEntity'));
+            $this->model->setAttribute('description', $request->get('descriptionSubEntity'));
         }
         $updated = $this->model->save();
         if ($updated) {
@@ -100,7 +98,7 @@ class SubEntityController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->model->find($id)->delete();
+        $deleted = $this->model->delete($id);
         if ($deleted) {
             return redirect()->route('entity.index');
         }

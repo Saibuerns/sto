@@ -1,13 +1,14 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Box;
 use App\Models\SubEntity;
-use Illuminate\Http\Request;
+use App\Http\Requests\Entity\SubEntity\Box\StoreRequest;
+use App\Http\Requests\Entity\SubEntity\Box\UpdateRequest;
 
 class BoxController extends Controller
 {
+
     function __construct(Box $box)
     {
         $this->model = $box;
@@ -40,19 +41,16 @@ class BoxController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request, SubEntity $subEntity)
+    public function store(StoreRequest $request)
     {
-        $idSubEntity = $request->get('idSubEntity');
         $this->model->setAttribute('name', $request->get('boxName'));
+        $this->model->setAttribute('idSubentity', $request->get('idSubEntity'));
         if ($request->has('boxDescription')) {
-            $this->model->setAttribute('description', $request->get('subEntityDescription'));
+            $this->model->setAttribute('description', $request->get('boxDescription'));
         }
-        $subEntity = $subEntity->find($idSubEntity);
-        $saved = $subEntity->boxes()->save($this->model);
+        $saved = $this->model->save();
         if ($saved) {
-            $prefixs = $subEntity->prefixs;
-            $boxes = $subEntity->boxes;
-            return redirect()->route('entity.subentity.show')->with('data', ['prefixs' => $prefixs, 'boxes' => $boxes]);
+            return redirect()->route('entity.subentity.show');
         }
     }
 
@@ -87,20 +85,17 @@ class BoxController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, SubEntity $subEntity)
+    public function update(UpdateRequest $request, $id)
     {
-        $idSubEntity = $request->get('idSubEntity');
-        $box = $this->model->find($id);
-        $box->setAttribute('name', $request->get('boxName'));
+        $this->model->find($id);
+        $this->model->setAttribute('name', $request->get('boxName'));
+        $this->model->setAttribute('idSubEntity', $request->get('idSubEntity'));
         if ($request->has('boxDescription')) {
-            $box->setAttribute('description', $request->get('boxDescription'));
+            $this->model->setAttribute('description', $request->get('boxDescription'));
         }
-        $subEntity = $subEntity->find($idSubEntity);
-        $updated = $subEntity->boxes()->save($box);
+        $updated = $this->model->save();
         if ($updated) {
-            $prefixs = $subEntity->prefixs;
-            $boxes = $subEntity->boxes;
-            return redirect()->route('entity.subentity.show')->with('data', ['prefixs' => $prefixs, 'boxes' => $boxes]);
+            return redirect()->route('entity.subentity.show');
         }
     }
 
@@ -110,11 +105,11 @@ class BoxController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($idSubEntity, $id)
+    public function destroy($id)
     {
-        $deleted = $this->model->find($id)->delete();
+        $deleted = $this->model->delete($id);
         if ($deleted) {
-            return redirect()->route('entity.subentity.show')->with('idSubEntity', $idSubEntity);
+            return redirect()->route('entity.subentity.show');
         }
     }
 }

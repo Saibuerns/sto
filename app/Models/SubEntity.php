@@ -18,9 +18,9 @@ class SubEntity extends Model
         return $this->belongsTo(\App\Models\Entity::class);
     }
 
-    function prefixs()
+    function prefix()
     {
-        return $this->hasMany(\App\Models\Prefix::class, 'idSubEntity', 'id');
+        return $this->hasOne(\App\Models\Prefix::class, 'idSubEntity', 'id');
     }
 
     function boxes()

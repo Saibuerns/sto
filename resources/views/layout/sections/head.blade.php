@@ -6,16 +6,18 @@
     <meta name="author" content="">
     <title>TURNERO</title>
 
-    <!-- Bootstrap core CSS -->
-    @if(Internet::is_connected())
-        <link rel="stylesheet"
-              href="{!! secure_url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css') !!}"
-              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-              crossorigin="anonymous">
-    @else
-        <link rel="stylesheet" href="{!! asset('bootstrap/css/bootstrap.css/bootstrap.min.css') !!}">
-@endif
 
-<!-- Custom styles for this template -->
+    @if(Internet::is_connected())
+    <!-- Bootstrap core CSS -->    
+    <link rel="stylesheet"
+          href="{!! secure_url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css') !!}"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    @else
+    <link rel="stylesheet" href="{!! asset('bootstrap/css/bootstrap.css') !!}">
+    @endif
+
+
+    <!-- Custom styles for this template -->
 
 </head>

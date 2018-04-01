@@ -2,12 +2,11 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Editar Prefijo</h3>
+            <h3 class="panel-title">Nuevo Box</h3>
         </div>
-        <form action="{!! route('entity.subentity.prefix.update', ['idSubEntity', $subEntity->id]) !!}" method="post"
+        <form action="{!! route('entity.subentity.box.store', ['idSubEntity', $subEntity->id]) !!}" method="post"
               role="form">
             {!! csrf_field() !!}
-            {!! method_field('PUT') !!}
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -28,30 +27,14 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            <label for="prefix">Prefijo</label>
-                            <input type="text" class="form-control" name="prefix" id="prefix" autofocus
-                                   maxlength="5" required value="{{$prefix->prefix}}">
+                            <label for="boxName">Nombre</label>
+                            <input type="text" class="form-control" name="boxName" id="boxName" autofocus
+                                   maxlength="50" required>
                         </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
-                            <label for="from">Comienzo</label>
-                            <input type="number" class="form-control" name="from"
-                                   id="from" value="{{$prefix->from}}" required>
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <div class="form-group">
-                            <label for="to">Hasta</label>
-                            <input type="number" class="form-control" name="to"
-                                   id="to" value="{{$prefix->to}}" required>
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <div class="form-group">
-                            <label for="to">Prioridad</label>
-                            <input type="number" class="form-control" name="priority"
-                                   id="priority" value="{{$prefix->priority}}" required>
+                            <label for="boxDescription">Descripción</label>
+                            <input type="text" class="form-control" name="boxDescription"
+                                   id="boxDescription">
                         </div>
                     </div>
                 </div>

@@ -1,20 +1,22 @@
 <?php
-
 /*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+  |--------------------------------------------------------------------------
+  | Web Routes
+  |--------------------------------------------------------------------------
+  |
+  | Here is where you can register web routes for your application. These
+  | routes are loaded by the RouteServiceProvider within a group which
+  | contains the "web" middleware group. Now create something great!
+  |
+ */
 
 Route::group(['prefix' => 'entidades'], function () {
     Route::get('/', 'EntityController@index')->name('entity.index');
     Route::get('/nueva', 'EntityController@create')->name('entity.create');
     Route::post('/guardar', 'EntityController@store')->name('entity.store');
+    Route::get('/{idEntity}/editar', 'EntityController@edit')->name('entity.edit');
+    Route::put('/{idEntity}/actualizar', 'EntityController@update')->name('entity.update');
+    Route::delete('/{idEntity}/baja', 'EntityController@delete')->name('entity.delete');
     Route::group(['prefix' => '{idEntity}/subentidades'], function () {
         Route::get('/nueva', 'SubEntityController@create')->name('entity.subentity.create');
         Route::post('/guardar', 'SubEntityController@store')->name('entity.subentity.store');

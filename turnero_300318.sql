@@ -47,9 +47,9 @@ DROP TABLE IF EXISTS `call`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `call` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `start` timestamp NOT NULL,
-  `recalls` int(11) DEFAULT '5',
-  `end` timestamp NULL DEFAULT NULL,
+  `start` datetime NOT NULL,
+  `recalls` int(11) DEFAULT NULL,
+  `end` datetime DEFAULT NULL,
   `idNumber` bigint(20) NOT NULL,
   `idBox` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -75,7 +75,7 @@ CREATE TABLE `entity` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,6 +91,7 @@ CREATE TABLE `number` (
   `code` varchar(255) NOT NULL,
   `idPrefix` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
+  `called` binary(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_number_prefix_idx` (`idPrefix`),
   CONSTRAINT `fk_number_prefix` FOREIGN KEY (`idPrefix`) REFERENCES `prefix` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -107,8 +108,9 @@ DROP TABLE IF EXISTS `prefix`;
 CREATE TABLE `prefix` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `prefix` char(5) NOT NULL,
-  `from` int(11) NOT NULL DEFAULT '1',
-  `reset` datetime NOT NULL,
+  `from` int(11) unsigned NOT NULL,
+  `to` int(11) NOT NULL,
+  `priority` int(11) DEFAULT NULL,
   `idSubEntity` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -116,6 +118,23 @@ CREATE TABLE `prefix` (
   PRIMARY KEY (`id`),
   KEY `fk_prefix_subEntity_idx` (`idSubEntity`),
   CONSTRAINT `fk_prefix_subEntity` FOREIGN KEY (`idSubEntity`) REFERENCES `sub_entity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `printer`
+--
+
+DROP TABLE IF EXISTS `printer`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `printer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `ip` varchar(20) NOT NULL,
+  `port` int(11) NOT NULL,
+  `selected` binary(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -149,4 +168,4 @@ CREATE TABLE `sub_entity` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-03-30 17:08:38
+-- Dump completed on 2018-04-01  1:22:08

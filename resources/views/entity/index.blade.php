@@ -30,7 +30,7 @@
                                         data-target="#subEntity{{$entity->id}}">{{$entity->description}}</td>
                                     <td>{{$entity->created_at->toDateString()}}</td>
                                     <td>
-                                        <button id="modifyE" type="button" class="btn btn-info">Editar</button>
+                                        <button id="modifyE" type="button" class="btn btn-info" onclick="window.location='{!! route('entity.edit', ['idEntity' => $entity->id]) !!}'">Editar</button>
                                     </td>
                                     <td>
                                         <button id="softDeleteE" type="button" class="btn btn-danger">Baja</button>
@@ -57,7 +57,7 @@
                                             <tbody>
                                             @foreach($entity->subEntitys as $subEntity)
                                                 <tr role="button"
-                                                    onclick="{!! route('entity.subentity.show', ['idEntity' => $entity->id, 'idSubEntity' => $subEntity->id]) !!}">
+                                                    onclick="window.location='{!! route('entity.subentity.show', ['idEntity' => $entity->id, 'idSubEntity' => $subEntity->id]) !!}'">
                                                     <td>{{$subEntity->id}}</td>
                                                     <td>{{$subEntity->name}}</td>
                                                     <td>{{$subEntity->description}}</td>
@@ -78,7 +78,27 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <button type="button" class="btn btn-success btn-block">Nueva Entidad</button>
+            <button type="button" class="btn btn-success btn-block" onclick="window.location='{!! route('entity.create')!!}'">Nueva Entidad</button>
         </div>
     </div>
 @endsection
+@push('scriptsJS')
+<script type="text/javascript">
+    $('#softDeleteE').on('click', function (){
+        swal({
+            title: 'Dar de baja', 
+            text: "¿Esta seguro de dar de baja la entidad?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: "Si",
+            cancelButtonText: "No",
+            cancelButtonColor: '#3085d6',
+            confirmButtonColor: '#d33'
+        }).then((result) => {
+            if(result.value){
+                window.location='{!! route('entity.delete', ['idEntity' => $entity->id]) !!}';
+            }            
+        });        
+    });
+</script>
+@endpush

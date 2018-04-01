@@ -1,11 +1,9 @@
 <?php
-
 namespace App\Http\Controllers;
 
-
 use App\Models\Entity;
-use Illuminate\Http\Request;
 use App\Http\Requests\Entity\StoreRequest;
+use App\Http\Requests\Entity\UpdateRequest;
 
 class EntityController extends Controller
 {
@@ -45,15 +43,14 @@ class EntityController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $entitys = array();
         $this->model->setAttribute('name', $request->get('entityName'));
         if ($request->has('entityDescription')) {
             $this->model->setAttribute('description', $request->get('entityDescription'));
         }
-        if ($this->model->save()) {
-            $entitys = $this->model->all();
+        $saved = $this->model->save();
+        if ($saved) {
+            return redirect()->route('entity.index');
         }
-        return redirect()->route('entity.create')->with('entitys', $entitys);
     }
 
     /**
@@ -89,9 +86,9 @@ class EntityController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $entity = $this->model->find($id);
-        $entity->setAttribute($request->get('nameEntity'));
-        if ($request->has('descriptionEntity')) {
-            $entity->setAttribute($request->get('descriptionEntity'));
+        $entity->setAttribute('name', $request->get('entityName'));
+        if ($request->has('entityDescription')) {
+            $entity->setAttribute('description', $request->get('entityDescription'));
         }
         $updated = $entity->save();
         if ($updated) {
@@ -107,8 +104,9 @@ class EntityController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->model->find($id)->delete();
+        $deleted = $this->model->delete($id);
         if ($deleted) {
+            alert()->success('La entidad fue dada de baja correctamente', 'Exito!');
             return redirect()->route('entity.index');
         }
     }

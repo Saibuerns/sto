@@ -152,6 +152,7 @@ return [
          */
         App\Providers\BootstrapServiceProvider::class,
         App\Providers\HelpersServiceProvider::class,
+        UxWeb\SweetAlert\SweetAlertServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -210,8 +211,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Internet' => App\Helpers\InternetConnection::class
-
+        'Internet' => App\Helpers\InternetConnection::class,
+        'Alert' => UxWeb\SweetAlert\SweetAlert::class
     ],
 
 ];

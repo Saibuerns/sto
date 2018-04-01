@@ -6,7 +6,7 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">Nueva Entidad</h3>
                 </div>
-                <form action="{!! route('entity.update') !!}" method="post" role="form">
+                <form action="{!! route('entity.update', ['idEntity' => $entity->id]) !!}" method="post" role="form">
                     {!! csrf_field() !!}
                     <div class="panel-body">
                         <div class="row">
