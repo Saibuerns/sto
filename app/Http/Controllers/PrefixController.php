@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Prefix;
@@ -29,10 +30,10 @@ class PrefixController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($idEntity, $idSubEntity, SubEntity $subEntity)
+    public function create($idSubEntity, SubEntity $subEntity)
     {
         $subEntity = $subEntity->find($idSubEntity);
-        return view('entity.subentity.prefix.create')->with('subEntity', $subEntity);
+        return view('prefix.create')->with('subEntity', $subEntity);
     }
 
     /**
@@ -41,7 +42,7 @@ class PrefixController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request, $idEntity)
+    public function store(StoreRequest $request)
     {
         $this->model->setAttribute('prefix', $request->get('prefix'));
         $this->model->setAttribute('from', $request->get('from'));
@@ -49,10 +50,12 @@ class PrefixController extends Controller
         if ($request->has('priority')) {
             $this->model->setAttribute('priority', $request->get('priority'));
         }
-        $this->model->setAttribute('idSubEntity', $request->get('idSubEntity'));
+        $idSubEntity = $request->get('idSubEntity');
+        $this->model->setAttribute('idSubEntity', $idSubEntity);
         $saved = $this->model->save();
         if ($saved) {
-            return redirect()->route('entity.subentity.show');
+            alert()->success('Prefijo asignado con exito', '¡Prefijo Asignado!');
+            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
         }
     }
 
@@ -73,11 +76,10 @@ class PrefixController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($idEntity, $idSubEntity, $id, SubEntity $subEntity)
+    public function edit($id)
     {
-        $name = $subEntity->find($idSubEntity)->name;
         $prefix = $this->model->find($id);
-        return view('entity.subentity.prefix.edit')->with(['subEntity' => $name, 'prefix' => $prefix]);
+        return view('prefix.edit')->with('prefix', $prefix);
     }
 
     /**
@@ -89,15 +91,16 @@ class PrefixController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $this->model->find($id);
-        $this->model->setAttribute('prefix', $request->get('prefix'));
-        $this->model->setAttribute('from', $request->get('from'));
-        $this->model->setAttribute('to', $request->get('to'));
-        $this->model->setAttribute('priority', $request->get('priority'));
-        $this->model->setAttribute('idSubEntity', $request->get('idSubEntity'));
-        $updated = $this->model->save();
+        $prefix = $this->model->find($id);
+        $prefix->setAttribute('prefix', $request->get('prefix'));
+        $prefix->setAttribute('from', $request->get('from'));
+        $prefix->setAttribute('to', $request->get('to'));
+        $prefix->setAttribute('priority', $request->get('priority'));
+        $idSubEntity = $request->get('idSubEntity');
+        $prefix->setAttribute('idSubEntity', $idSubEntity);
+        $updated = $prefix->save();
         if ($updated) {
-            return redirect()->route('entity.subentity.show');
+            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
         }
     }
 
@@ -111,7 +114,13 @@ class PrefixController extends Controller
     {
         $deleted = $this->model->delete($id);
         if ($deleted) {
-            return redirect()->route('entity.subentity.show');
+            return redirect()->route('subentity.show');
         }
+    }
+
+    public function getPrefixByPrefix($idSubEntity, $prefix)
+    {
+        $exits = $this->model->where('idSubEntity', $idSubEntity)->where('prefix', $prefix)->get();
+        return response()->json($exits);
     }
 }

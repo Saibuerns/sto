@@ -11,7 +11,7 @@ class Prefix extends Model
 
     protected $table = 'prefix';
     protected $primaryKey = 'id';
-    protected $fillable = ['prefix', 'from', 'to', 'priority'];
+    protected $fillable = ['prefix', 'from', 'to', 'priority', 'idSubEntity'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     function subEntity()

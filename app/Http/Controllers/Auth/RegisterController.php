@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Models\Entity;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,43 +31,59 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/home';
 
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
+        $this->model = $user;
         $this->middleware('guest');
+    }
+
+    public function showRegistrationForm()
+    {
+        $entitys = Entity::all();
+        return view('auth.register')->with('entitys', $entitys);
     }
 
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param  array $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'firstName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6',
         ]);
     }
 
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\User
+     * @param  array $data
+     * @return \App\Models\User
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $this->model->setAttribute('lastName', $data['lastName']);
+        $this->model->setAttribute('firstName', $data['firstName']);
+        $this->model->setAttribute('email', $data['email']);
+        $this->model->setAttribute('password', $data['password']);
+        if (isset($data['box'])) {
+            $this->model->setAttribute('idBox', $data['box']);
+        }
+        $saved = $this->model->save();
+        if ($saved) {
+            alert()->success('Usuario creado exitosamente', '¡NUEVO USUARIO CREADO!');
+            return $this->model;
+        }
     }
 }

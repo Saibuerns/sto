@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Entity;
@@ -20,7 +21,6 @@ class EntityController extends Controller
      */
     public function index()
     {
-        $entitys = array();
         $entitys = $this->model->all();
         return view('entity.index')->with('entitys', $entitys);
     }

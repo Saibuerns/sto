@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Box;
@@ -31,8 +32,8 @@ class BoxController extends Controller
      */
     public function create($idSubEntity, SubEntity $subEntity)
     {
-        $name = $subEntity->find($idSubEntity)->name;
-        return view('entity.subentity.box.create')->with('subEntity', $name);
+        $subEntity = $subEntity->find($idSubEntity);
+        return view('box.create')->with('subEntity', $subEntity);
     }
 
     /**
@@ -44,13 +45,15 @@ class BoxController extends Controller
     public function store(StoreRequest $request)
     {
         $this->model->setAttribute('name', $request->get('boxName'));
-        $this->model->setAttribute('idSubentity', $request->get('idSubEntity'));
+        $idSubEntity = $request->get('idSubEntity');
+        $this->model->setAttribute('idSubentity', $idSubEntity);
         if ($request->has('boxDescription')) {
             $this->model->setAttribute('description', $request->get('boxDescription'));
         }
         $saved = $this->model->save();
         if ($saved) {
-            return redirect()->route('entity.subentity.show');
+            alert()->success('Nuevo box guardado exitosamente', '¡Exito!');
+            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
         }
     }
 
@@ -71,11 +74,10 @@ class BoxController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($idSubEntity, $id, SubEntity $subEntity)
+    public function edit($id)
     {
-        $name = $subEntity->find($idSubEntity)->name;
         $box = $this->model->find($id);
-        return view('entity.subentity.box.create')->with(['subEntity' => $name, 'box' => $box]);
+        return view('box.create')->with('box', $box);
     }
 
     /**
@@ -87,15 +89,17 @@ class BoxController extends Controller
      */
     public function update(UpdateRequest $request, $id)
     {
-        $this->model->find($id);
-        $this->model->setAttribute('name', $request->get('boxName'));
-        $this->model->setAttribute('idSubEntity', $request->get('idSubEntity'));
+        $box = $this->model->find($id);
+        $box->setAttribute('name', $request->get('boxName'));
+        $idSubEntity = $request->get('idSubEntity');
+        $box->setAttribute('idSubEntity', $idSubEntity);
         if ($request->has('boxDescription')) {
-            $this->model->setAttribute('description', $request->get('boxDescription'));
+            $box->setAttribute('description', $request->get('boxDescription'));
         }
-        $updated = $this->model->save();
+        $updated = $box->save();
         if ($updated) {
-            return redirect()->route('entity.subentity.show');
+            alert()->success('Box actualizado exitosamente', '¡Exitoso!');
+            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
         }
     }
 
@@ -109,7 +113,12 @@ class BoxController extends Controller
     {
         $deleted = $this->model->delete($id);
         if ($deleted) {
-            return redirect()->route('entity.subentity.show');
+            return redirect()->route('subentity.show');
         }
+    }
+
+    public function getBoxes($idSubEntity)
+    {
+        return response()->json($this->model->where('idSubEntity', $idSubEntity)->get());
     }
 }

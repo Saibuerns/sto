@@ -12,6 +12,7 @@ class SubEntity extends Model
     protected $table = 'sub_entity';
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'description'];
+    protected $hidden = ['updated_at', 'deleted_at'];
 
     function entity()
     {

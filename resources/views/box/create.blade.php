@@ -2,38 +2,38 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Nueva Sub Entidad</h3>
+            <h3 class="panel-title">Nuevo Box</h3>
         </div>
-        <form action="{!! route('entity.subentity.store', ['idEntity', $entity->id]) !!}" method="post" role="form">
+        <form action="{!! route('box.store') !!}" method="post" role="form">
             {!! csrf_field() !!}
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
-                            <label for="idEntity">Nro Entidad</label>
+                            <label for="idSubEntity">Nro Sub Entidad</label>
                             <input type="text" class="form-control" id="idEntity" name="idEntity"
-                                   value="{!! $entity->id !!}" readonly>
+                                   value="{!! $subEntity->id !!}" readonly>
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
-                            <label for="entityName">Entidad</label>
+                            <label for="entityName">Sub Entidad</label>
                             <input type="text" class="form-control" id="entityName" name="entityName"
-                                   value="{!! $entity->name !!}" readonly>
+                                   value="{!! $subEntity->name !!}" readonly>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group input-group-md">
-                            <label for="entityName">Nombre</label>
-                            <input type="text" class="form-control" name="subEntityName" id="subEntityName" autofocus
+                        <div class="form-group">
+                            <label for="boxName">Nombre</label>
+                            <input type="text" class="form-control" name="boxName" id="boxName" autofocus
                                    maxlength="50" required>
                         </div>
                         <div class="form-group">
-                            <label for="entityDescription">Descripción</label>
-                            <input type="text" class="form-control" name="subEntityDescription"
-                                   id="subEntityDescription">
+                            <label for="boxDescription">Descripción</label>
+                            <input type="text" class="form-control" name="boxDescription"
+                                   id="boxDescription">
                         </div>
                     </div>
                 </div>

@@ -4,8 +4,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">Nuevo Box</h3>
         </div>
-        <form action="{!! route('entity.subentity.box.update', ['idSubEntity', $subEntity->id]) !!}" method="post"
-              role="form">
+        <form action="{!! route('box.update', ['idBox', $box->id]) !!}" method="post" role="form">
             {!! csrf_field() !!}
             {!! method_field('PUT') !!}
             <div class="panel-body">
@@ -14,14 +13,14 @@
                         <div class="form-group">
                             <label for="idSubEntity">Nro Sub Entidad</label>
                             <input type="text" class="form-control" id="idSubEntity" name="idSubEntity"
-                                   value="{!! $subEntity->id !!}" readonly>
+                                   value="{!! $box->subEntity->id !!}" readonly>
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
                             <label for="subEntityName">Sub Entidad</label>
                             <input type="text" class="form-control" id="subEntityName" name="subEntityName"
-                                   value="{!! $subEntity->name !!}" readonly>
+                                   value="{!! $box->subEntity->name !!}" readonly>
                         </div>
                     </div>
                 </div>
