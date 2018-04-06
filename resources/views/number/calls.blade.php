@@ -2,7 +2,7 @@
 <html lang="es">
 @include('layout.sections.head')
 <body style="background-color: #0000F0">
-<div class="container">
+<div class="container-fluid">
     <div class="row" style="margin-top: 5%;">
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
             <div class="panel panel-primary">
