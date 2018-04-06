@@ -10,7 +10,11 @@
                     <h3 class="panel-title">Imagenes</h3>
                 </div>
                 <div class="panel-body">
-                    @include('layout.components.video')
+                    @if(isset($file))
+                        @include('layout.components.video')
+                    @else
+                        @include('layout.components.thumbnails')
+                    @endif
                 </div>
             </div>
         </div>

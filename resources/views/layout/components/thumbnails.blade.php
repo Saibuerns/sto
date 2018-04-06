@@ -1,3 +1,3 @@
 <a class="thumbnail" href="#">
-    <img src="..." alt="...">
+    <img src="{!! url()->to('/') . $file->path !!}" alt="...">
 </a>

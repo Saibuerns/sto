@@ -129,7 +129,10 @@ class NumberController extends Controller
             $section = view()->make('layout.components.numberList')->with(['calls' => $calls])->render();
             return response()->json($section);
         }
-        $files = $file->all();
+        $video = $file->where('type', 'video')->orderBy('id', 'desc')->first();
+        if (!empty($video)) {
+            return view('number.calls')->with(['calls' => $calls, 'file' => $video]);
+        }
         return view('number.calls')->with(['calls' => $calls, 'files' => $files]);
     }
 
