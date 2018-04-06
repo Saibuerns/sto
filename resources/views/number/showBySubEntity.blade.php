@@ -46,8 +46,9 @@
                     $('#repeat').attr('disabled', false);
                     $('#next').attr('disabled', false);
                     $('#stop').attr('disabled', false);
-                    $('#code').html('<h1>' + data.code + '</h1>');
-                    idNumber = data.id;
+                    $('#code').html('<h1>' + data.number.code + '</h1>');
+                    idNumber = data.number.id;
+                    idCall = data.id;
                     $('#numbersList').empty().html(getNumbersList());
                 }
             });

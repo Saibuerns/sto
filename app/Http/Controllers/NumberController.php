@@ -114,12 +114,12 @@ class NumberController extends Controller
             $updated = $number->save();
             $saved = $call->save();
             if ($updated && $saved) {
-                $code = $number;
+                $response = $call->with('number')->where('idNumber', $number->id)->first();
             }
         } else {
             $code = "¡NO HAY NUMEROS PARA LLAMAR!";
         }
-        return response()->json($code);
+        return response()->json($response);
     }
 
     public function getNumbersList(Request $request, Call $call, File $file)

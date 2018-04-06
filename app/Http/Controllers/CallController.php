@@ -93,21 +93,21 @@ class CallController extends Controller
         $recall = $request->get('recall');
         $end = $request->get('end');
         $number = $call->number;
-        $this->model->setAttribute('idNumber', $call->idNumber);
-        $this->model->setAttribute('idBox', $call->idBox);
-        $saved = $this->model->save();
-        if ($saved) {
-            if (($recall == "true") && ($end == "false")) {
+        if (($recall == "true") && ($end == "false")) {
+            $this->model->setAttribute('idNumber', $call->idNumber);
+            $this->model->setAttribute('idBox', $call->idBox);
+            $saved = $this->model->save();
+            if ($saved) {
                 $recalls = $number->recalls + 1;
                 $number->setAttribute('recalls', $recalls);
-            } elseif (($recall == "false") && ($end == "true")) {
-                $fechahora = Carbon::now();
-                $number->setAttribute('end', $fechahora);
             }
-            $updated = $number->save();
-            if ($updated) {
-                return response()->json(true);
-            }
+        } elseif (($recall == "false") && ($end == "true")) {
+            $fechahora = Carbon::now();
+            $number->setAttribute('end', $fechahora);
+        }
+        $updated = $number->save();
+        if ($updated) {
+            return response()->json(true);
         }
     }
 
