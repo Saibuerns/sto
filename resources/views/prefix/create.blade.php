@@ -2,7 +2,7 @@
 @section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">Nuevo Prefijo</h3>
+            <h3 class="panel-title">Asignar Prefijo</h3>
         </div>
         <form action="{!! route('prefix.store') !!}" method="post" role="form">
             {!! csrf_field() !!}
@@ -28,7 +28,8 @@
                         <div class="form-group">
                             <label for="prefix">Prefijo</label>
                             <input type="text" class="form-control" name="prefix" id="prefix" autofocus maxlength="5"
-                                   required>
+                                   required onkeyup="upperCase(this)">
+                            <span class="help-block">Es de gran utilidad que el prefijo sea la primera letra de la sub entidad, si esta ya existe se le agrega la segunda</span>
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -47,13 +48,14 @@
                         <div class="form-group">
                             <label for="to">Prioridad</label>
                             <input type="number" class="form-control" name="priority" id="priority">
+                            <span class="help-block">Si no se asigna una prioridad, los numeros seran ordenados segun cantidad</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="panel-footer">
                 <button type="reset" class="btn btn-info">Limpiar</button>
-                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                <button type="submit" class="btn btn-primary pull-right">Asignar</button>
             </div>
         </form>
     </div>

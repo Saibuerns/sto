@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -13,13 +14,18 @@ class Box extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'description', 'idSubEntity'];
 
-    function subEntity()
+    public function subEntity()
     {
-        return $this->belongsTo(\App\Models\SubEntity::class);
+        return $this->belongsTo(\App\Models\SubEntity::class, 'idSubEntity');
     }
 
-    function calls()
+    public function calls()
     {
         return $this->hasMany(\App\Models\Call::class, 'idBox', 'id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(\App\Models\User::class, 'idBox', 'id');
     }
 }

@@ -20,15 +20,17 @@
                                    id="subEntityDescription">
                         </div>
                         <div class="form-group">
+                            <label for="entitys">Entidades</label>
                             <select name="entity" id="entitys"
-                                    class="form-control" {!! !is_array($entitys) ? 'disabled' : '' !!} required>
-                                @if(is_array($entitys))
+                                    class="form-control"
+                                    {!! !is_a($entitys, \Illuminate\Database\Eloquent\Collection::class) ? 'read-only' : '' !!} required>
+                                @if(is_a($entitys, \Illuminate\Database\Eloquent\Collection::class))
                                     <option value=""> -- Seleccionar --</option>
                                     @foreach($entitys as $entity)
                                         <option value="{!! $entity->id !!}">{!! $entity->name !!}</option>
                                     @endforeach
                                 @else
-                                    <option value="{!! $entity->id !!}" selected>{!! $entity->name !!}</option>
+                                    <option value="{!! $entitys->id !!}" selected>{!! $entitys->name !!}</option>
                                 @endif
                             </select>
                         </div>

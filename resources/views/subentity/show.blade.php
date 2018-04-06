@@ -70,7 +70,10 @@
                                             <td>{!! $box->name !!}</td>
                                             <td>{!! $box->description !!}</td>
                                             <td>
-                                                <button class="btn btn-success">Editar</button>
+                                                <button class="btn btn-success"
+                                                        onclick="window.location = '{!! route('box.edit', ['idBox' => $box->id]) !!}'">
+                                                    Editar
+                                                </button>
                                             </td>
                                             <td>
                                                 <button class="btn btn-danger">Dar de baja</button>

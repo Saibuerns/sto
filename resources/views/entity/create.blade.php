@@ -27,7 +27,7 @@
                     </div>
                     <div class="panel-footer">
                         <button type="reset" class="btn btn-info">Limpiar</button>
-                        <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                        <button type="submit" class="btn btn-primary pull-right">Guardar</button>
                     </div>
                 </form>
             </div>

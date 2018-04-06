@@ -55,7 +55,7 @@ class PrefixController extends Controller
         $saved = $this->model->save();
         if ($saved) {
             alert()->success('Prefijo asignado con exito', '¡Prefijo Asignado!');
-            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
+            return redirect()->route('subentity.show', ['idSubEntity' => $idSubEntity]);
         }
     }
 
@@ -100,7 +100,8 @@ class PrefixController extends Controller
         $prefix->setAttribute('idSubEntity', $idSubEntity);
         $updated = $prefix->save();
         if ($updated) {
-            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
+            alert()->success('Prefijo editado con exito', '¡Prefijo Editado!');
+            return redirect()->route('subentity.show', ['idSubEntity' => $idSubEntity]);
         }
     }
 

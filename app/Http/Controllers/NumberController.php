@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Box;
+use App\Models\Call;
+use App\Models\File;
+use Illuminate\Http\Request;
 use App\Models\Entity;
 use App\Models\Number;
 use App\Models\SubEntity;
@@ -28,7 +32,7 @@ class NumberController extends Controller
      */
     public function index()
     {
-        //        
+        return view('number.showBySubEntity');
     }
 
     /**
@@ -65,6 +69,8 @@ class NumberController extends Controller
                 $code = $prefix->prefix . '-' . str_pad($number, $lenght, '0', STR_PAD_LEFT);
                 $this->model->setAttribute('number', $number);
                 $this->model->setAttribute('code', $code);
+                $fechahora = Carbon::now()->toDateTimeString();
+                $this->model->setAttribute('start', $fechahora);
                 $this->model->setAttribute('idPrefix', $prefix->id);
                 $saved = $this->model->save();
                 if ($saved) {
@@ -79,18 +85,6 @@ class NumberController extends Controller
             throw $exc;
         }
         return redirect()->route('number.create1');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return Response
-     */
-    public function showNumbers($idSubEntity, SubEntity $subEntity)
-    {
-        $numbers = $subEntity->find($idSubEntity)->prefix->numbers->where('called', 0);
-        return view('number.showBySubEntity')->with(['numbers' => $numbers]);
     }
 
     public function storePrinter(PrinterRequest $request, Printer $printer)
@@ -108,9 +102,40 @@ class NumberController extends Controller
         return redirect()->route('printers.index');
     }
 
+    public function getNumber($idBox, Box $box, Call $call)
+    {
+        $box = $box->find($idBox);
+        $number = $box->subEntity->prefix->numbers->where('end', null)->first();
+        if (!is_null($number)) {
+            $fechahora = Carbon::now()->toDateTimeString();
+            $number->setAttribute('end', $fechahora);
+            $call->setAttribute('idNumber', $number->id);
+            $call->setAttribute('idBox', $box->id);
+            $updated = $number->save();
+            $saved = $call->save();
+            if ($updated && $saved) {
+                $code = $number;
+            }
+        } else {
+            $code = "¡NO HAY NUMEROS PARA LLAMAR!";
+        }
+        return response()->json($code);
+    }
+
+    public function getNumbersList(Request $request, Call $call, File $file)
+    {
+        $calls = $call->orderBy('id', 'desc')->take(8)->get();
+        if ($request->ajax()) {
+            $section = view()->make('layout.components.numberList')->with(['calls' => $calls])->render();
+            return response()->json($section);
+        }
+        $files = $file->all();
+        return view('number.calls')->with(['calls' => $calls, 'files' => $files]);
+    }
+
     private function checkNumber($idPrefix, $from, $to)
     {
-        $lastNumber = $this->model->where('idPrefix', $idPrefix)->max()->value('number');
+        $lastNumber = $this->model->where('idPrefix', $idPrefix)->max('id');
         if (!is_null($lastNumber)) {
             if ($lastNumber <= $to) {
                 $number = $lastNumber + 1;

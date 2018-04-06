@@ -2,10 +2,24 @@
 <html lang="es">
 @include('layout.sections.head')
 <body>
-<div class="container">@yield('content2')</div>
-
-@include('layout.sections.header')
-<div class="container">@yield('content')</div>
+@if(Auth::check())
+    @include('layout.sections.header')
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                @yield('content')
+            </div>
+        </div>
+    </div>
+@else
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                @yield('content2')
+            </div>
+        </div>
+    </div>
+@endif
 <!-- /.container -->
 @include('layout.sections.footer')
 

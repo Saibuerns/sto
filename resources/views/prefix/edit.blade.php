@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label for="prefix">Prefijo</label>
                             <input type="text" class="form-control" name="prefix" id="prefix" autofocus
-                                   maxlength="5" required value="{{$prefix->prefix}}">
+                                   maxlength="5" required value="{{$prefix->prefix}}" onkeyup="upperCase(this)">
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -57,7 +57,7 @@
             </div>
             <div class="panel-footer">
                 <button type="reset" class="btn btn-info">Limpiar</button>
-                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                <button type="submit" class="btn btn-primary pull-right">Actualizar</button>
             </div>
         </form>
     </div>
@@ -65,7 +65,7 @@
 @push('scriptsJS')
     <script type="text/javascript">
         $('#prefix').on('change', function () {
-            url = '{!! url()->to('/') !!}' + '/components/subentitys/' + {!! $subEntity->id !!} +'/prefixs/' + this.value + '/exist';
+            url = '{!! url()->to('/') !!}' + '/components/subentitys/' + {!! $prefix->subEntity->id !!} +'/prefixs/' + this.value + '/exist';
             $.getJSON(url, function (data) {
                 prefix = document.getElementById('prefix');
                 if (!jQuery.isEmptyObject(data) || !(Array.isArray(data) && data.length == 0)) {

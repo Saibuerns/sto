@@ -16,7 +16,7 @@ class Prefix extends Model
 
     function subEntity()
     {
-        return $this->belongsTo(\App\Models\SubEntity::class);
+        return $this->belongsTo(\App\Models\SubEntity::class, 'idSubEntity');
     }
 
     function numbers()

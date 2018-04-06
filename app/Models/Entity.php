@@ -17,4 +17,5 @@ class Entity extends Model
     {
         return $this->hasMany(\App\Models\SubEntity::class, 'idEntity', 'id');
     }
+
 }

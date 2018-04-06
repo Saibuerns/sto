@@ -52,8 +52,8 @@ class BoxController extends Controller
         }
         $saved = $this->model->save();
         if ($saved) {
-            alert()->success('Nuevo box guardado exitosamente', '¡Exito!');
-            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
+            alert()->success('Nuevo box guardado exitosamente', '¡Box Guardado!');
+            return redirect()->route('subentity.show', ['idSubEntity' => $idSubEntity]);
         }
     }
 
@@ -77,7 +77,7 @@ class BoxController extends Controller
     public function edit($id)
     {
         $box = $this->model->find($id);
-        return view('box.create')->with('box', $box);
+        return view('box.edit')->with('box', $box);
     }
 
     /**
@@ -98,8 +98,8 @@ class BoxController extends Controller
         }
         $updated = $box->save();
         if ($updated) {
-            alert()->success('Box actualizado exitosamente', '¡Exitoso!');
-            return redirect()->route('subentity.show')->with('idSubEntity', $idSubEntity);
+            alert()->success('Box actualizado exitosamente', '¡Box Actualizado!');
+            return redirect()->route('subentity.show', ['idSubEntity' => $idSubEntity]);
         }
     }
 

@@ -1,171 +1,207 @@
-CREATE DATABASE  IF NOT EXISTS `turnero` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `turnero`;
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
---
--- Host: 127.0.0.1    Database: turnero
--- ------------------------------------------------------
--- Server version	5.7.19
+-- MySQL Workbench Forward Engineering
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
---
--- Table structure for table `box`
---
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema turnero
+-- -----------------------------------------------------
 
-DROP TABLE IF EXISTS `box`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `box` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  `idSubEntity` int(11) NOT NULL,
+-- -----------------------------------------------------
+-- Schema turnero
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `turnero` DEFAULT CHARACTER SET utf8 ;
+USE `turnero` ;
+
+-- -----------------------------------------------------
+-- Table `turnero`.`entity`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`entity` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(255) NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `turnero`.`sub_entity`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`sub_entity` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(255) NULL DEFAULT NULL,
+  `idEntity` INT(11) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_box_sub_entity_idx` (`idSubEntity`),
-  CONSTRAINT `fk_box_sub_entity` FOREIGN KEY (`idSubEntity`) REFERENCES `sub_entity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  INDEX `fk_subEntity_entity_idx` (`idEntity` ASC),
+  CONSTRAINT `fk_subEntity_entity`
+    FOREIGN KEY (`idEntity`)
+    REFERENCES `turnero`.`entity` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 0
+DEFAULT CHARACTER SET = utf8;
 
---
--- Table structure for table `call`
---
 
-DROP TABLE IF EXISTS `call`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `call` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `start` datetime NOT NULL,
-  `recalls` int(11) DEFAULT NULL,
-  `end` datetime DEFAULT NULL,
-  `idNumber` bigint(20) NOT NULL,
-  `idBox` int(11) DEFAULT NULL,
+-- -----------------------------------------------------
+-- Table `turnero`.`box`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`box` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(50) NOT NULL,
+  `description` VARCHAR(255) NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
+  `idSubEntity` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_call_number_idx` (`idNumber`),
-  KEY `fk_call_box_idx` (`idBox`),
-  CONSTRAINT `fk_call_box` FOREIGN KEY (`idBox`) REFERENCES `box` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_call_number` FOREIGN KEY (`idNumber`) REFERENCES `number` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  INDEX `fk_box_sub_entity_idx` (`idSubEntity` ASC),
+  CONSTRAINT `fk_box_sub_entity`
+    FOREIGN KEY (`idSubEntity`)
+    REFERENCES `turnero`.`sub_entity` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
---
--- Table structure for table `entity`
---
 
-DROP TABLE IF EXISTS `entity`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `entity` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `number`
---
-
-DROP TABLE IF EXISTS `number`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `number` (
-  `id` bigint(20) NOT NULL,
-  `number` int(11) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `idPrefix` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `called` binary(1) DEFAULT NULL,
+-- -----------------------------------------------------
+-- Table `turnero`.`prefix`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`prefix` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `prefix` CHAR(5) NOT NULL,
+  `from` INT(11) UNSIGNED NOT NULL,
+  `to` INT(11) NOT NULL,
+  `priority` INT(11) NULL DEFAULT NULL,
+  `idSubEntity` INT(11) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+  `deleted_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_number_prefix_idx` (`idPrefix`),
-  CONSTRAINT `fk_number_prefix` FOREIGN KEY (`idPrefix`) REFERENCES `prefix` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  INDEX `fk_prefix_subEntity_idx` (`idSubEntity` ASC),
+  CONSTRAINT `fk_prefix_subEntity`
+    FOREIGN KEY (`idSubEntity`)
+    REFERENCES `turnero`.`sub_entity` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
---
--- Table structure for table `prefix`
---
 
-DROP TABLE IF EXISTS `prefix`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `prefix` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `prefix` char(5) NOT NULL,
-  `from` int(11) unsigned NOT NULL,
-  `to` int(11) NOT NULL,
-  `priority` int(11) DEFAULT NULL,
-  `idSubEntity` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
+-- -----------------------------------------------------
+-- Table `turnero`.`number`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`number` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `number` INT(11) NOT NULL,
+  `code` VARCHAR(255) NOT NULL,
+  `idPrefix` INT(11) NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `called` BINARY(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_prefix_subEntity_idx` (`idSubEntity`),
-  CONSTRAINT `fk_prefix_subEntity` FOREIGN KEY (`idSubEntity`) REFERENCES `sub_entity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  INDEX `fk_number_prefix_idx` (`idPrefix` ASC),
+  CONSTRAINT `fk_number_prefix`
+    FOREIGN KEY (`idPrefix`)
+    REFERENCES `turnero`.`prefix` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
---
--- Table structure for table `printer`
---
 
-DROP TABLE IF EXISTS `printer`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `printer` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `ip` varchar(20) NOT NULL,
-  `port` int(11) NOT NULL,
-  `selected` binary(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `sub_entity`
---
-
-DROP TABLE IF EXISTS `sub_entity`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sub_entity` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `idEntity` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
+-- -----------------------------------------------------
+-- Table `turnero`.`call`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`call` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `start` DATETIME NOT NULL,
+  `recalls` INT(11) NULL DEFAULT NULL,
+  `end` DATETIME NULL DEFAULT NULL,
+  `idNumber` BIGINT(20) NOT NULL,
+  `idBox` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_subEntity_entity_idx` (`idEntity`),
-  CONSTRAINT `fk_subEntity_entity` FOREIGN KEY (`idEntity`) REFERENCES `entity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+  INDEX `fk_call_number_idx` (`idNumber` ASC),
+  INDEX `fk_call_box_idx` (`idBox` ASC),
+  CONSTRAINT `fk_call_box`
+    FOREIGN KEY (`idBox`)
+    REFERENCES `turnero`.`box` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_call_number`
+    FOREIGN KEY (`idNumber`)
+    REFERENCES `turnero`.`number` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-01  1:22:08
+-- -----------------------------------------------------
+-- Table `turnero`.`password_resets`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`password_resets` (
+  `email` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
+  `token` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  INDEX `password_resets_email_index` (`email` ASC))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+
+-- -----------------------------------------------------
+-- Table `turnero`.`printer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`printer` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `ip` VARCHAR(20) NOT NULL,
+  `port` INT(11) NOT NULL,
+  `selected` BINARY(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `turnero`.`users`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `turnero`.`users` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
+  `email` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
+  `password` VARCHAR(255) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NOT NULL,
+  `remember_token` VARCHAR(100) CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci' NULL DEFAULT NULL,
+  `created_at` TIMESTAMP NULL DEFAULT NULL,
+  `updated_at` TIMESTAMP NULL DEFAULT NULL,
+  `idBox` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `users_email_unique` (`email` ASC),
+  INDEX `fk_users_box1_idx` (`idBox` ASC),
+  CONSTRAINT `fk_users_box1`
+    FOREIGN KEY (`idBox`)
+    REFERENCES `turnero`.`box` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

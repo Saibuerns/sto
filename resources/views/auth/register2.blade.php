@@ -1,10 +1,10 @@
 @extends('layout.app')
-@section('content2')
+@section('content')
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title text-center">Nuevo Usuario</h3>
         </div>
-        <form action="{!! route('register') !!}" method="post" role="form">
+        <form action="{!! route('user.store') !!}" method="post" role="form">
             {!! csrf_field() !!}
             <div class="panel-body">
                 <div class="form-group">

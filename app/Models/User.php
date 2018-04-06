@@ -14,8 +14,18 @@ class User extends Model
 
     protected $fillable = ['lastName', 'firstName', 'email', 'password', 'idBox'];
 
+    public function box()
+    {
+        return $this->belongsTo(\App\Models\Box::class, 'idBox');
+    }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->attributes['lastName'] . " " . $this->attributes['firstName'];
     }
 }

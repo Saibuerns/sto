@@ -4,7 +4,7 @@
         <div class="panel-heading">
             <h3 class="panel-title">Nuevo Box</h3>
         </div>
-        <form action="{!! route('box.update', ['idBox', $box->id]) !!}" method="post" role="form">
+        <form action="{!! route('box.update', ['idBox' => $box->id]) !!}" method="post" role="form">
             {!! csrf_field() !!}
             {!! method_field('PUT') !!}
             <div class="panel-body">
@@ -41,7 +41,7 @@
             </div>
             <div class="panel-footer">
                 <button type="reset" class="btn btn-info">Limpiar</button>
-                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                <button type="submit" class="btn btn-primary pull-right">Actualizar</button>
             </div>
         </form>
     </div>

@@ -11,14 +11,14 @@
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
                             <label for="idSubEntity">Nro Sub Entidad</label>
-                            <input type="text" class="form-control" id="idEntity" name="idEntity"
+                            <input type="text" class="form-control" id="idSubEntity" name="idSubEntity"
                                    value="{!! $subEntity->id !!}" readonly>
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
                             <label for="entityName">Sub Entidad</label>
-                            <input type="text" class="form-control" id="entityName" name="entityName"
+                            <input type="text" class="form-control" id="subEntityName" name="subEntityName"
                                    value="{!! $subEntity->name !!}" readonly>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
             </div>
             <div class="panel-footer">
                 <button type="reset" class="btn btn-info">Limpiar</button>
-                <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                <button type="submit" class="btn btn-primary pull-right">Guardar</button>
             </div>
         </form>
     </div>

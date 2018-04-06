@@ -37,10 +37,6 @@
         </div>
     </div>
     <div class="panel-footer">
-    <!--<button class="btn btn-success"
-                onclick="window.location = '{!!route('prefix.create', ['idEntity' => $idEntity,'idSubEntity' => $subEntity->id])!!}'">
-            Nuevo Prefijo
-        </button>-->
         <button type="button" class="btn btn-default"
                 onclick="window.location = '{!!route('prefix.edit', ['idPrefix' => $subEntity->prefix->id])!!}'">
             Editar

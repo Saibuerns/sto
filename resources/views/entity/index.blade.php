@@ -28,7 +28,7 @@
                                         data-target="#subEntity{{$entity->id}}">{{$entity->name}}</td>
                                     <td role="button" data-toggle="collapse"
                                         data-target="#subEntity{{$entity->id}}">{{$entity->description}}</td>
-                                    <td>{{$entity->created_at->toDateString()}}</td>
+                                    <td>{{$entity->created_at->format('d-m-Y')}}</td>
                                     <td>
                                         <button id="modifyE" type="button" class="btn btn-info"
                                                 onclick="window.location='{!! route('entity.edit', ['idEntity' => $entity->id]) !!}'">

@@ -2,10 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Call\StoreRequest;
+use App\Http\Requests\Call\UpdateRequest;
+use App\Models\Call;
+use App\Models\Number;
+use Carbon\Carbon;
 
 class CallController extends Controller
 {
+    function __construct(Call $call)
+    {
+        $this->model = $call;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -29,18 +38,30 @@ class CallController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $fechahora = Carbon::now()->toDateTimeString();
+        $this->model->setAttribute('start', $fechahora);
+        $idBox = $request->get('idBox');
+        $this->model->setAttribute('idBox', $idBox);
+        $idNumber = $request->get('idNumber');
+        $this->model->setAttribute('idNumber', $idNumber);
+        $saved = $this->model->save();
+        if ($saved) {
+            if ($request->ajax()) {
+                return response()->json($this->model);
+            }
+            return redirect()->route('numbers.showBySubEntity', ['call' => $saved]);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -51,7 +72,7 @@ class CallController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -62,19 +83,38 @@ class CallController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        //
+        $call = $this->model->find($id);
+        $recall = $request->get('recall');
+        $end = $request->get('end');
+        $number = $call->number;
+        $this->model->setAttribute('idNumber', $call->idNumber);
+        $this->model->setAttribute('idBox', $call->idBox);
+        $saved = $this->model->save();
+        if ($saved) {
+            if (($recall == "true") && ($end == "false")) {
+                $recalls = $number->recalls + 1;
+                $number->setAttribute('recalls', $recalls);
+            } elseif (($recall == "false") && ($end == "true")) {
+                $fechahora = Carbon::now();
+                $number->setAttribute('end', $fechahora);
+            }
+            $updated = $number->save();
+            if ($updated) {
+                return response()->json(true);
+            }
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

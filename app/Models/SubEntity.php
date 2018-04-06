@@ -16,7 +16,7 @@ class SubEntity extends Model
 
     function entity()
     {
-        return $this->belongsTo(\App\Models\Entity::class);
+        return $this->belongsTo(\App\Models\Entity::class, 'idEntity');
     }
 
     function prefix()
@@ -29,4 +29,13 @@ class SubEntity extends Model
         return $this->hasMany(\App\Models\Box::class, 'idSubEntity', 'id');
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = htmlspecialchars($value);
+    }
+
+    public function getNameAttribute()
+    {
+        return htmlspecialchars_decode($this->attributes['name']);
+    }
 }

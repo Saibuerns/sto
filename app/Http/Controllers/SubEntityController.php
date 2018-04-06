@@ -15,10 +15,17 @@ class SubEntityController extends Controller
         $this->model = $subEntity;
     }
 
-    public function index()
+    public function index(Entity $entity)
     {
+        $disabled = 'disabled';
         $subEntitys = $this->model->all();
-        return view('subentity.index')->with('subEntitys', $subEntitys);
+        if (!empty($entity->first())) {
+            $disabled = '';
+        } else {
+            alert()->warning('Debe cargar al menos una entidad, antes de poder cargar una sub entidad',
+                '¡No hay entidades cargadas!');
+        }
+        return view('subentity.index')->with(['subEntitys' => $subEntitys, 'disabled' => $disabled]);
     }
 
     /**
@@ -51,7 +58,8 @@ class SubEntityController extends Controller
         }
         $saved = $this->model->save();
         if ($saved) {
-            return redirect()->back();
+            alert()->success('Sub Entidad creada exitosamente', '¡Exito!');
+            return redirect()->route('subentity.index');
         }
     }
 
@@ -89,13 +97,14 @@ class SubEntityController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $subEntity = $this->model->find($id);
-        $subEntity->setAttribute('name', $request->get('nameSubEntity'));
+        $subEntity->setAttribute('name', $request->get('subEntityName'));
         $subEntity->setAttribute('idEntity', $request->get('idEntity'));
-        if ($request->has('descriptionSubEntity')) {
-            $subEntity->setAttribute('description', $request->get('descriptionSubEntity'));
+        if ($request->has('subEntityDescription')) {
+            $subEntity->setAttribute('description', $request->get('subEntityDescription'));
         }
         $updated = $subEntity->save();
         if ($updated) {
+            alert()->success('Sub Entidad actualizada con exito', '¡Sub Entidad Actualizada!');
             return redirect()->route('subentity.index');
         }
     }
