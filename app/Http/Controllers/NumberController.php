@@ -12,6 +12,7 @@ use App\Models\SubEntity;
 use App\Models\Printer;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector as PrintConnector;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer as Printerl;
 use Illuminate\Support\Carbon;
 
@@ -156,8 +157,10 @@ class NumberController extends Controller
     private function printNumber($code)
     {
         $this->setPrinter(new Printer);
-        $connector = new FilePrintConnector("./prueba.txt");
+        //$connector = new FilePrintConnector("./prueba.txt");
         //$connector = new PrintConnector($this->printer->ip, $this->printer->port);
+        $smbPrinter = "smb://" . $this->printer->ip . "/" . $this->printer->name;
+        $connector = new WindowsPrintConnector($smbPrinter);
         $print = new Printerl($connector);
         try {
             $print->setTextSize(5, 5);
